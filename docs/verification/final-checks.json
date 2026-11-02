@@ -1,0 +1,40 @@
+{
+  "verifiedAt": "2026-11-02T23:32:41.707Z",
+  "results": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "command": "pnpm exec tsc --noEmit",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "command": "pnpm lint",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "command": "pnpm test:run",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "command": "pnpm build",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "command": "pnpm audit --prod",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "command": "pnpm audit",
+      "exit": 1,
+      "error": null
+    }
+  ]
+}

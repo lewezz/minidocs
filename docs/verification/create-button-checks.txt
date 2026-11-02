@@ -1,0 +1,59 @@
+Diagnóstico del botón — 2026-11-02
+Resumen de verificaciones observadas. No contiene valores privados del entorno.
+
+Antes de editar aplicación:
+.env.local: ambas variables presentes y no vacías; SUPABASE_URL pasa validación local.
+validateEnvironment: invalid
+Único motivo: SUPABASE_SECRET_KEY debe ser una clave secreta sb_secret_ del servidor.
+Alice y Bob por HTTP: 200; configuración invalid; botón desactivado; no Creando…; selección de cookie correcta.
+
+Pruebas de regresión antes de la corrección:
+2 failed, 86 passed (88)
+Fallan los casos que requieren un diagnóstico específico de clave inválida o faltante.
+
+$ pnpm exec tsc --noEmit
+exit_code=0
+(sin errores)
+
+$ pnpm lint
+exit_code=0
+(sin errores)
+
+$ pnpm build
+exit_code=0
+  Finished TypeScript in 1139ms ...
+  Collecting page data using 6 workers ...
+  Generating static pages using 6 workers (0/3) ...
+✓ Generating static pages using 6 workers (3/3) in 292ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /documents/[id]
+└ ○ /icon.svg
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+
+$ pnpm test:run
+exit_code=0
+$ vitest run
+
+ RUN  v4.1.12 /Users/lewis/00-backup/05-dev/projects/active/minidocs
+
+
+ Test Files  7 passed (7)
+      Tests  88 passed (88)
+   Start at  23:53:09
+   Duration  413ms (transform 512ms, setup 0ms, import 921ms, tests 103ms, environment 1ms)
+
+
+HTTP tras corregir la pantalla:
+Current file configuration status: invalid
+Alice: HTTP 200, createDisabled=true, hasSpecificKeyDiagnosis=true, linkedDiagnostic=true
+Bob: HTTP 200, createDisabled=true, hasSpecificKeyDiagnosis=true, linkedDiagnostic=true
+No document creation request was executed.

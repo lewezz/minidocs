@@ -1,0 +1,20 @@
+{
+  "verifiedAt": "2026-11-02T23:25:05.660Z",
+  "transport": "Real HTTP React server actions on production build",
+  "browser": false,
+  "documentId": "d38aa79a-a2d1-4c9d-bd0b-0497b7aa5825",
+  "importedDocumentId": "98ff8e33-0f9c-4b0a-80f1-2acf03d92d1d",
+  "checks": [
+    "create",
+    "save formatted JSON",
+    "private Bob write denied",
+    "share twice idempotently",
+    "recipient reshare and rename denied",
+    "Bob save",
+    "multipart TXT import",
+    "unsupported file rejected",
+    "tampered actor rejected",
+    "demo-user action"
+  ],
+  "retainedDocuments": true
+}

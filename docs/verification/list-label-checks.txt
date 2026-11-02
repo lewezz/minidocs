@@ -1,0 +1,49 @@
+List-label review — 2026-11-03
+Summary of observed checks. Browser-visible Spanish text was not reproduced in the served source.
+
+$ pnpm exec tsc --noEmit
+exit_code=0
+(no errors)
+
+$ pnpm lint
+exit_code=0
+(no errors)
+
+$ pnpm test:run
+exit_code=0
+$ vitest run
+
+ RUN  v4.1.12 /Users/lewis/00-backup/05-dev/projects/active/minidocs
+
+
+ Test Files  7 passed (7)
+      Tests  88 passed (88)
+   Start at  00:12:22
+   Duration  445ms (transform 581ms, setup 0ms, import 1.15s, tests 114ms, environment 1ms)
+
+
+$ pnpm build
+exit_code=0
+✓ Compiled successfully in 676ms
+  Running TypeScript ...
+  Finished TypeScript in 1062ms ...
+  Collecting page data using 6 workers ...
+  Generating static pages using 6 workers (0/3) ...
+✓ Generating static pages using 6 workers (3/3) in 291ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /documents/[id]
+└ ○ /icon.svg
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+Static and production-asset checks: pass. All nine toolbar labels are English, including Bulleted List and Numbered List; no Lista label.
+HTTP: Alice and Bob return 200, lang=en, translate=no, connected to Supabase.
+An additional existing-document inspection could not run after the change because both visible lists had zero rows; its assertion returned exit 1. No records were created to work around that limitation.
+Native Chrome inspection: Computer Use permissions are not granted. No visual/browser-interaction verification.

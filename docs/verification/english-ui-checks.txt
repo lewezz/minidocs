@@ -1,0 +1,38 @@
+English UI and removal of non-functional decoration — 2026-11-03
+Summary of observed results, not a single combined command transcript.
+
+pnpm exec tsc --noEmit
+exit_code=0
+
+pnpm lint
+exit_code=0
+No warnings.
+
+pnpm test:run
+exit_code=0
+Vitest 4.1.12
+Test Files: 7 passed (7)
+Tests: 88 passed (88)
+Start: 00:04:44
+Duration: 307ms
+
+pnpm build (final, after CSS cleanup correction)
+exit_code=0
+Next.js 16.4.4, Turbopack
+Compiled successfully in 441ms
+Finished TypeScript in 984ms
+Generated static pages in 292ms
+Routes: /, /_not-found, /documents/[id], /icon.svg
+No empty-selector warnings in the final build.
+
+Static checks
+PASS: English runtime source, Tailwind import present, no empty/deleted-decoration CSS rules, corner radii <= 7px.
+
+Read-only HTTP checks
+Documents, Alice: 200, lang=en, English functional labels, slogans removed, Tailwind CSS served.
+Existing document: 200, English server-rendered editor labels; read-only check.
+Documents, Bob: 200, lang=en, English functional labels, slogans removed, Tailwind CSS served.
+Invalid document ID: 404, Page not found in English.
+
+No document creation, updates, title translation or content translation was executed against Supabase.
+No browser interactions or visual desktop/mobile verification were performed.

@@ -1,0 +1,76 @@
+Revisión de interfaz — 2026-11-02
+
+$ pnpm test:run
+exit_code=0
+$ vitest run
+
+ RUN  v4.1.12 /Users/lewis/00-backup/05-dev/projects/active/minidocs
+
+
+ Test Files  2 passed (2)
+      Tests  26 passed (26)
+   Start at  22:48:38
+   Duration  194ms (transform 31ms, setup 0ms, import 49ms, tests 7ms, environment 0ms)
+
+
+$ env PNPM_CONFIG_FETCH_RETRIES=0 pnpm audit
+exit_code=1
+Error: ERR_PNPM_AUDIT_BAD_RESPONSE
+
+  × Failed to request the audit endpoint (at https://registry.npmjs.org/-/npm/
+  │ v1/security/advisories/bulk): error sending request for url (https://
+  │ registry.npmjs.org/-/npm/v1/security/advisories/bulk)
+  ├─▶ client error (Connect)
+  ├─▶ dns error
+  ╰─▶ failed to lookup address information: nodename nor servname provided, or
+      not known
+
+
+$ node --input-type=module [comprobación puntual de radios y copias]
+exit_code=0
+PASS: 5 CSS corner declarations, all 3px; SVG corners <= 7; no large rounded utilities in src.
+PASS: four pre-change source backups exist.
+
+$ pnpm lint (primer intento)
+exit_code=1
+
+/Users/lewis/00-backup/05-dev/projects/active/minidocs/postcss.config.mjs
+  1:1  warning  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+✖ 1 problem (0 errors, 1 warning)
+
+ESLint found too many warnings (maximum: 0).
+[ELIFECYCLE] Command failed with exit code 1.
+
+$ pnpm exec tsc --noEmit
+exit_code=0
+
+$ pnpm build
+exit_code=1
+Extracto del error observado (se omite la URL generada para reportar el fallo):
+Failed to write app endpoint /page
+Caused by: globals.css; creating new process; binding to a port; Operation not permitted (os error 1)
+
+$ pnpm lint (tras corregir PostCSS)
+exit_code=0
+(sin avisos)
+
+$ pnpm build --webpack
+exit_code=0
+✓ Compiled successfully in 2.5s
+  Running TypeScript ...
+  Finished TypeScript in 1184ms ...
+  Collecting page data using 5 workers ...
+  Generating static pages using 5 workers (0/3) ...
+✓ Generating static pages using 5 workers (3/3) in 356ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+└ ○ /icon.svg
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

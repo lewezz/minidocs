@@ -1,0 +1,22 @@
+{
+  "verifiedAt": "2026-11-02T23:23:12.164Z",
+  "database": "real Supabase",
+  "browser": false,
+  "documentId": "a3a71446-cf74-48e3-8479-4fe61e470f6e",
+  "importedDocumentId": "904c8dfd-1d07-4218-94d0-ce3235a25ee1",
+  "checks": [
+    "create",
+    "rename",
+    "rich JSON save/reopen",
+    "private read/write/share denied",
+    "share persisted",
+    "duplicate count=1",
+    "Bob shared list",
+    "Bob edit",
+    "Alice reads Bob changes",
+    "recipient rename/reshare denied",
+    "TXT UTF-8/blank lines/literal HTML persisted",
+    "authorized HTTP document pages"
+  ],
+  "retainedDocuments": true
+}

@@ -1,0 +1,6 @@
+MiniDocs import verification
+
+Unicode: Café, España, 日本語, 📝
+This line follows the Unicode example.
+
+<strong>This is literal text, not HTML formatting.</strong>

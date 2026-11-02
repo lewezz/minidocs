@@ -1,0 +1,89 @@
+Hito 2 — 2026-11-02
+Resumen de salidas reales observadas; no es una transcripción única de una ejecución conjunta.
+
+pnpm --version: 12.16.1
+node --version: v24.21.0
+pnpm-lock.yaml: presente antes de implementar y actualizado por pnpm install
+
+pnpm install
+exit_code=0
+Packages: +51
+dependencies:
++ @tiptap/core 3.32.2
++ @tiptap/pm 3.32.2
++ @tiptap/react 3.32.2
++ @tiptap/starter-kit 3.32.2
+Done in 1.4s using pnpm v12.16.1
+
+pnpm exec tsc --noEmit
+exit_code=0
+(sin errores)
+
+pnpm lint
+exit_code=0
+$ eslint . --max-warnings=0
+(sin errores ni warnings en la ejecución final)
+
+pnpm test:run
+exit_code=0
+$ vitest run
+RUN v4.1.12
+Test Files 6 passed (6)
+Tests 83 passed (83)
+Start at 23:14:15
+Duration 324ms
+
+pnpm build
+exit_code=0
+$ next build
+Next.js 16.4.4 (Turbopack)
+Compiled successfully in 590ms
+Finished TypeScript in 1295ms
+Generating static pages using 6 workers (3/3) in 289ms
+Finalizing page optimization
+Routes:
+ƒ /
+○ /_not-found
+ƒ /documents/[id]
+○ /icon.svg
+
+pnpm audit --prod
+exit_code=0
+No known vulnerabilities found
+
+pnpm audit --json
+exit_code=1
+1 moderate advisory in development dependencies:
+minimatch has potential denial of service via globparts amplification
+GHSA-g3hv-75wg-m249
+patched_versions: >=11.0.1
+Affected paths: ESLint / eslint-config-next tooling (dev: true)
+
+Local PostgreSQL verification
+exit_code=0
+PASS: supabase/migrations/20261102000100_initial_schema.sql
+PASS: supabase/seed.sql
+PASS: supabase/seed.sql
+PASS: supabase/tests/schema.sql
+NOTICE: PASS: seed, constraints, sharing integrity, timestamp and browser grants
+PASS: isolated PostgreSQL 17 schema + repeated seed + constraints/grants verification.
+This does not verify the Supabase REST repository or browser flows.
+Temporary PostgreSQL stopped.
+
+HTTP verification
+exit_code=0
+PASS: HTTP home + missing configuration state; invalid UUID returns 404; valid UUID without environment shows a safe error.
+These are HTTP checks without a browser or database persistence.
+
+Static verification
+exit_code=0
+PASS: 7 corner declarations respect the 7px maximum.
+PASS: SSR setting, private DB module, pnpm lockfile and absence of alternative lockfiles.
+
+Supabase environment check (values omitted)
+Supabase environment: missing
+Falta SUPABASE_URL. Falta SUPABASE_SECRET_KEY.
+
+Browser check
+Computer Use permissions are not granted
+No real browser E2E verification completed.

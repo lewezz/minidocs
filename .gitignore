@@ -1,0 +1,28 @@
+# Dependencies and package-manager caches
+node_modules/
+.pnpm-store/
+.pnpm-state/
+
+# Next.js output and generated TypeScript files
+.next/
+out/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Tests and tooling caches
+coverage/
+.turbo/
+.eslintcache
+
+# Private configuration; commit only the empty environment template
+.env*
+!.env.example
+
+# Deployment metadata, local backups and delivery archives
+.vercel/
+.local/
+
+# Operating-system files and logs
+.DS_Store
+*.log
