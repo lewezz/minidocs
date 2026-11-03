@@ -21,15 +21,17 @@ React UI → Next.js server action → validated demo cookie
 
 `demo_users` holds Alice/Bob with stable IDs. `documents` stores UUID, owner FK, title, JSONB content, creation and modification timestamps. `document_shares` grants editor access through a document/user composite primary key.
 
-Sharing uses an idempotent upsert with `ignoreDuplicates`, backed by the composite key. It can only be requested by the owner and targets the other demo identity. Existing permissions are loaded when reopening the editor. No revocation feature is included.
+Sharing uses an idempotent upsert with `ignoreDuplicates`, backed by the composite key. It can only be requested by the owner and targets the other demo identity. Existing permissions are loaded when reopening the editor. Owner-only revocation deletes the exact document/recipient/editor grant and is idempotent. Subsequent reads and saves check access again; already-delivered content and requests already in flight cannot be withdrawn from a browser.
 
-SQL constraints validate basic titles/content, foreign keys, a single editor permission, no self-sharing, immutable ownership, and modification timestamps. `supabase/seed.sql` is repeatable. The initial migration is applied once; no new database migration is required for the final sharing/import implementation.
+SQL constraints validate basic titles/content, foreign keys, a single editor permission, no self-sharing, immutable ownership, and modification timestamps. `supabase/seed.sql` is repeatable. Apply the initial migration once, followed by `20261103000100_document_deletion.sql`; the latter adds DELETE only for the server role and is safe to repeat. Browser grants and RLS stay unchanged.
+
+Deletion checks the actor, UUID and ownership in the service, then also filters the repository DELETE by document ID and owner ID. PostgreSQL's existing `ON DELETE CASCADE` removes permissions atomically. No title/content validation is needed for deleting an otherwise inaccessible or malformed document: the operation accepts only its validated UUID. The UI asks for explicit confirmation; there is no trash/restore. Removing an imported document uses the same path, as the original TXT is not stored separately.
 
 ## Authorization and secrets
 
 The active handle is read from an HttpOnly/SameSite cookie and resolved against Alice/Bob. Missing cookies default to Alice; arbitrary handles are rejected. Creation/import ownership is assigned from that actor, never from an owner supplied by the client.
 
-Owners can read, edit, rename and share. A permitted collaborator can read/edit content but cannot rename or share. Every service operation checks authorization; the UI is not the security boundary. Ownership metadata is checked before full content is loaded.
+Owners can read, edit, rename, share, revoke sharing and delete. A permitted collaborator can read/edit content but cannot rename, share, revoke access or delete. Every service operation checks authorization; the UI is not the security boundary. Ownership metadata is checked before full content is loaded.
 
 The server secret bypasses RLS, so application authorization is mandatory. Browser roles have no direct table grants. The SDK and environment loader import `server-only`; private variables have no `NEXT_PUBLIC_` prefix. Error messages omit secret values and raw database failures.
 
@@ -53,6 +55,6 @@ Structured documents are limited to 512 KiB, 5,000 nodes and depth 32; titles to
 
 Node 24 and pnpm 12.16.1 are pinned. Vercel uses the Next.js preset and Corepack commands with a frozen lockfile. Secrets are configured in the deployment environment, not uploaded from local files. The application intentionally fails clearly when configuration is missing.
 
-The simple service/repository architecture, manual saves and two fixed identities keep the assessment focused. Pagination, real authentication, optimistic concurrency, revocation, rate limiting and broad browser E2E coverage are improvements rather than hidden claims of completion.
+The simple service/repository architecture, manual saves and two fixed identities keep the assessment focused. Pagination, real authentication, optimistic concurrency, recoverable deletion, rate limiting and broad browser E2E coverage are improvements rather than hidden claims of completion.
 
 Verification levels and real results are documented in `docs/VERIFICATION.md`. Real database and HTTP-action reports are separate from mocked unit tests and from the still-unverified browser walkthrough.

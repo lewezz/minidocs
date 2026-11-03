@@ -18,6 +18,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:integration": "vitest run tests/supabase.integration.test.ts",
+    "test:lifecycle": "vitest run tests/document-lifecycle.integration.test.ts",
     "test:http": "node scripts/verify-http-actions.mjs",
     "check": "pnpm typecheck && pnpm lint && pnpm test:run && pnpm build"
   },

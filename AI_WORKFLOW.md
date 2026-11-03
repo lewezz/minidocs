@@ -16,6 +16,7 @@ Codex generated and edited the application, SQL, tests and documentation; inspec
 4. **Configuration diagnosis:** traced a disabled create button to an invalid local secret format. Preserved validation and authorization, exposed safe actionable diagnostics, and did not replace credentials or claim a database write.
 5. **English review:** translated visible text, errors, accessibility and dates. The user reported list text; source and served assets were checked, explicit list labels were added, and the page was marked not to be automatically translated. Browser access limitations were not presented as a visual pass.
 6. **Final requirements:** implemented owner-only idempotent sharing and validated UTF-8 TXT import; added unit/integration tests, production configuration, real Supabase and HTTP-action checks, and delivery documentation.
+7. **Requested document management:** added owner-only deletion with confirmation and sharing revocation. Inspection and real empty-delete preflight exposed missing server DELETE grants. An incremental SQL migration preserves existing data and browser restrictions; unit tests and isolated PostgreSQL checks cover authorization, grant scoping, revocation and cascades. Current remote/browser verification status is kept in `docs/VERIFICATION.md` rather than assumed from these tests.
 
 ## Generated code that needed correction
 
@@ -45,4 +46,4 @@ Codex generated and edited the application, SQL, tests and documentation; inspec
 
 The candidate should run and record the browser walkthrough, publish the application under an owned Vercel account, check production logs and submit the real URLs.
 
-With another 2–4 hours, prioritize: a browser E2E suite and accessibility pass; authenticated identities instead of the demo selector; optimistic concurrency protection for simultaneous edits; compatible tooling/security updates; then pagination and sharing revocation. These are explicitly proposed improvements, not implemented features.
+With another 2–4 hours, prioritize: a browser E2E suite and accessibility pass; authenticated identities instead of the demo selector; optimistic concurrency protection for simultaneous edits; compatible tooling/security updates; then pagination and recoverable deletion. These are explicitly proposed improvements, not implemented features.

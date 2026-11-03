@@ -11,7 +11,7 @@ vi.mock("@/server/environment", () => ({ getServerEnvironment: mocks.environment
 vi.mock("@/server/demo-session", () => ({ getActiveDemoUser: mocks.user }));
 vi.mock("@/server/documents", () => ({ getDocumentService: () => ({ list: mocks.list }) }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }));
-vi.mock("@/app/actions/documents", () => ({ createDocumentAction: vi.fn(), importTxtAction: vi.fn() }));
+vi.mock("@/app/actions/documents", () => ({ createDocumentAction: vi.fn(), importTxtAction: vi.fn(), deleteDocumentAction: vi.fn() }));
 vi.mock("@/app/actions/demo-user", () => ({ setDemoUserAction: vi.fn() }));
 
 const secret = "sb_secret_server_only_test_value_1234567890";

@@ -283,6 +283,16 @@ h1 {
   background: #e7e2d7;
 }
 
+.button--danger {
+  border-color: #bd8577;
+  background: transparent;
+  color: #9a3021;
+}
+
+.button--danger:hover:not(:disabled) {
+  background: #f0ded3;
+}
+
 .button:disabled {
   opacity: .7;
 }
@@ -620,6 +630,10 @@ h1 {
 .document-panel--filled { display: block; min-height: 0; }
 .document-list { margin: 0; padding: 0; list-style: none; }
 .document-list li + li { border-top: 1px solid #d8d3c7; }
+.document-list-item { display: flex; align-items: center; }
+.document-list-item .document-row { flex: 1; min-width: 0; }
+.document-list-actions { flex-shrink: 0; max-width: 240px; padding: 12px 20px 12px 0; }
+.delete-control .button { min-height: 36px; padding: 7px 12px; }
 .document-row { display: flex; align-items: center; gap: 17px; min-height: 91px; padding: 20px 24px; }
 .document-row:hover { background: #eee9de; }
 .document-row-icon { flex-shrink: 0; color: #a66954; }
@@ -673,9 +687,13 @@ h1 {
 .editor-footnote { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; margin-top: 18px; color: #69675e; font-size: 10px; line-height: 1.8; }
 .editor-demo-note { margin: 25px 0 0; color: #69675e; font-size: 11px; line-height: 1.8; }
 .import-controls, .share-control { max-width: 280px; }
+.share-control { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+.share-status { color: #586b4b; font-size: 11px; }
 .share-hint { margin: -15px 0 20px; }
 
 @media (max-width: 760px) {
+  .document-list-item { flex-wrap: wrap; }
+  .document-list-actions { padding: 0 15px 14px; max-width: 100%; }
   .document-row { gap: 12px; padding: 18px 15px; }
   .document-row-text strong { font-size: 18px; }
   .document-open { font-size: 0; }

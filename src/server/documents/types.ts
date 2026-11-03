@@ -10,5 +10,7 @@ export interface DocumentRepository {
   create(input: { ownerId: string; title: string; content: DocumentContent }): Promise<StoredDocument>;
   save(id: string, input: { content: DocumentContent; title?: string }): Promise<StoredDocument | null>;
   share(id: string, userId: string): Promise<void>;
+  unshare(id: string, userId: string): Promise<void>;
+  remove(id: string, ownerId: string): Promise<boolean>;
   shareRecipients(id: string): Promise<string[]>;
 }

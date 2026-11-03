@@ -27,6 +27,20 @@ function databaseFailure(): never {
 
 export function supabaseDocumentRepository(client: SupabaseClient<Database>): DocumentRepository {
   return {
+    async remove(id, ownerId) {
+      const { data, error } = await client.from("documents").delete()
+        .eq("id", id).eq("owner_id", ownerId).select("id").maybeSingle();
+      if (error) databaseFailure();
+      // The existing FK removes this document's permissions in the same transaction.
+      return data !== null;
+    },
+
+    async unshare(id, userId) {
+      const { error } = await client.from("document_shares").delete()
+        .eq("document_id", id).eq("user_id", userId).eq("permission", "editor");
+      if (error) databaseFailure();
+    },
+
     async share(id, userId) {
       const { error } = await client.from("document_shares").upsert(
         { document_id: id, user_id: userId, permission: "editor" },

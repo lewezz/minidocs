@@ -9,6 +9,7 @@ import { EditorToolbar } from "@/components/editor/editor-toolbar";
 import { DocumentShareButton } from "@/components/editor/document-share-button";
 import { Icon } from "@/components/ui/icon";
 import { DemoUserSwitcher } from "@/components/workspace/demo-user-switcher";
+import { DeleteDocumentButton } from "@/components/workspace/delete-document-button";
 import { DEMO_USERS, type DemoUser } from "@/lib/demo-users";
 import { MAX_TITLE_LENGTH, type DocumentRecord } from "@/lib/documents";
 import { documentExtensions } from "@/lib/editor/extensions";
@@ -99,7 +100,7 @@ export function DocumentEditor({ document, user, canRename, sharedWith }: { docu
             </button>
           </div>
         </div>
-        {canRename && dirty && <p className="title-help share-hint">Save your changes before sharing.</p>}
+        {canRename && dirty && <p className="title-help share-hint">Save your changes before changing access.</p>}
         {error && <p className="error-notice" role="alert">{error}</p>}
         <section className="editor-surface" aria-label="Text editor">
           {editor ? <EditorToolbar editor={editor} /> : <div className="editor-loading" role="status">Loading editor…</div>}
@@ -108,6 +109,7 @@ export function DocumentEditor({ document, user, canRename, sharedWith }: { docu
         <div className="editor-footnote">
           <span>Last saved: <time dateTime={updatedAt}>{dateFormat.format(new Date(updatedAt))} UTC</time></span>
           <span>Owner: {owner?.name ?? "Demo user"}</span>
+          {canRename && <DeleteDocumentButton id={document.id} title={title} disabled={pending} returnToDocuments />}
         </div>
         <p className="editor-demo-note" id="demo-explanation">Alice and Bob are demo identities, not secure production authentication.</p>
       </main>

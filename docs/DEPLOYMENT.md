@@ -39,9 +39,15 @@ The local production build and actual Supabase/HTTP acceptance checks pass. `pnp
 
 ## Database
 
-The existing Supabase project was actually used for creation, JSON persistence, sharing, duplicate prevention, Bob editing and TXT import. No additional migration is needed for these features: the original schema already includes `document_shares` and its primary key.
+The existing Supabase project was actually used for creation, JSON persistence, sharing, duplicate prevention, Bob editing and TXT import. Deletion and revocation, added later, require the incremental migration below because the initial server role grants did not include DELETE:
 
-For a **new** project only, apply `supabase/migrations/20261102000100_initial_schema.sql` once, then `supabase/seed.sql`. Do not reapply the existing migration on a configured database. The seed is repeatable. `supabase/tests/schema.sql` is an optional administrative constraint/grant check that rolls back its writes.
+```sql
+grant delete on table public.documents, public.document_shares to service_role;
+```
+
+This is checked in as `supabase/migrations/20261103000100_document_deletion.sql`. Run it in the existing project's SQL Editor before using Delete/Stop sharing. It is safe to repeat and changes no existing documents, browser access or RLS. A real empty-delete preflight initially returned 403 / `42501` for both tables; newer live verification, if present, is recorded separately.
+
+For a **new** project only, apply both migrations in filename order, then `supabase/seed.sql`. Do not reapply the initial migration on a configured database. The seed is repeatable. `supabase/tests/schema.sql` and `supabase/tests/document-lifecycle.sql` are optional administrative checks that roll back their writes.
 
 The demo selector deliberately allows either identity. Do not use this assessment deployment to store private production data. The server secret must remain private even in this demo.
 

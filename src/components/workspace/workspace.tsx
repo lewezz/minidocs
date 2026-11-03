@@ -102,7 +102,7 @@ export function Workspace({ configuration, configurationIssues, user, documents,
               <div><h2 id="owned-heading">My documents</h2><span className="count-badge">{ownedCount}</span></div>
             </div>
             <div className={`document-panel ${documents.owned.length ? "document-panel--filled" : ""}`}>
-              {documents.owned.length ? <DocumentList documents={documents.owned} /> :
+              {documents.owned.length ? <DocumentList documents={documents.owned} allowDelete /> :
                 <EmptyState title={loadError ? "Documents unavailable" : "No documents yet"} description={loadError ? "Reload to try again." : "Select New document to create one."} />}
             </div>
           </section>

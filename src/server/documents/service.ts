@@ -12,6 +12,29 @@ const inaccessible = () => new AppError("NOT_FOUND", "The document does not exis
 
 export function documentService(repository: DocumentRepository) {
   return {
+    async remove(handle: unknown, inputId: unknown) {
+      const actor = requireDemoUser(handle);
+      const id = validateDocumentId(inputId);
+      const access = await repository.findAccess(id, actor.id);
+      if (!access) throw inaccessible();
+      if (!access.canRename) throw new AppError("FORBIDDEN", "Only the owner can delete the document.");
+      if (!await repository.remove(id, actor.id)) throw inaccessible();
+      return { id };
+    },
+
+    async unshare(handle: unknown, inputId: unknown) {
+      const actor = requireDemoUser(handle);
+      const id = validateDocumentId(inputId);
+      const access = await repository.findAccess(id, actor.id);
+      if (!access) throw inaccessible();
+      if (!access.canRename) throw new AppError("FORBIDDEN", "Only the owner can stop sharing the document.");
+      const recipient = DEMO_USERS.find((user) => user.id !== actor.id);
+      if (!recipient) throw new AppError("VALIDATION", "No demo recipient is available.");
+      // Idempotent: a missing permission is already in the requested state.
+      await repository.unshare(id, recipient.id);
+      return { id, recipientId: recipient.id, recipientName: recipient.name };
+    },
+
     async importTxt(handle: unknown, file: unknown) {
       const actor = requireDemoUser(handle);
       const parsed = await parseTxtImport(file);

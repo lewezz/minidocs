@@ -1,0 +1,48 @@
+Local PostgreSQL 17.11; isolated cluster on port 55438.
+Both migrations; incremental grant and seed repeated. All test writes roll back.
+CREATE ROLE
+CREATE ROLE
+CREATE ROLE
+BEGIN
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE TRIGGER
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+REVOKE
+REVOKE
+GRANT
+GRANT
+GRANT
+GRANT
+COMMIT
+BEGIN
+GRANT
+COMMIT
+BEGIN
+GRANT
+COMMIT
+BEGIN
+INSERT 0 2
+COMMIT
+BEGIN
+INSERT 0 2
+COMMIT
+BEGIN
+DO
+ROLLBACK
+BEGIN
+SET
+DO
+ROLLBACK
+psql:supabase/tests/schema.sql:83: NOTICE:  PASS: seed, constraints, sharing integrity, timestamp and browser grants
+psql:supabase/tests/document-lifecycle.sql:37: NOTICE:  PASS: server DELETE grants, revocation, owner predicate and cascading shares
+
+EXIT 0

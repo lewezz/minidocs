@@ -1,6 +1,33 @@
 # Verificación — MiniDocs
 
-Estado más reciente, **finalización · 2026-11-03**: **TypeScript, lint, 105 pruebas unitarias y build Turbopack correctos**. Además pasó una prueba explícita con **Supabase real**, seguida de acciones HTTP reales sobre el build de producción local. Se verificaron creación, JSON/formato, reapertura, permisos, compartir sin duplicados, edición de Bob visible para Alice e importación TXT. **No son pruebas de interacción en navegador. No hay despliegue público verificado.** La auditoría de producción no informa vulnerabilidades conocidas; la completa informa un aviso moderado de desarrollo. Los bloqueos iniciales de red/configuración que siguen debajo son históricos.
+## Última actualización · Eliminar y dejar de compartir · 2026-11-03
+
+El código de eliminación/revocación está implementado con controles de propietario en servidor. **TypeScript, lint, build y 122 pruebas unitarias pasan; dos integraciones remotas se omiten por defecto.** Migraciones y pruebas SQL nuevas verificadas en PostgreSQL 17.11 aislado. **La comprobación positiva en Supabase de estas dos funciones sigue bloqueada hasta aplicar el nuevo permiso DELETE.** Los resultados Supabase/HTTP satisfactorios de los apartados anteriores corresponden al flujo original de crear/guardar/compartir/importar, no prueban el borrado nuevo.
+
+| Comprobación nueva | Resultado real |
+| --- | --- |
+| `pnpm install --frozen-lockfile` | Exit 0; sin dependencias nuevas y con el lockfile existente. |
+| `pnpm exec tsc --noEmit` / `pnpm lint` | Exit 0 / exit 0, sin warnings. |
+| `pnpm test:run` | Exit 0: **122 pasadas y 2 omitidas**; 9 archivos pasados y 2 omitidos. |
+| `pnpm build` | Exit 0, Turbopack, rutas existentes conservadas. |
+| `pnpm audit --prod` | Exit 0, sin vulnerabilidades conocidas según el registro. |
+| `pnpm audit` | Exit 1: permanece el aviso moderado minimatch en herramientas ESLint. No se añadieron dependencias ni se silenció. |
+| Migraciones en PostgreSQL local 17.11 | Inicial + incremental; incremental y seed repetidos, todos con exit 0. Es una instancia aislada, no Supabase remoto. |
+| `supabase/tests/schema.sql` + `supabase/tests/document-lifecycle.sql` | PASS. Comprobados grants, RLS/navegador, retirar permiso sin borrar documento, filtro por propietario y cascada al borrar. Escrituras revertidas con ROLLBACK; proceso local detenido después. |
+| Preflight de DELETE real en Supabase | Ambas tablas devolvieron **403 / 42501** usando un UUID recién generado que no corresponde a documentos existentes; no se borraron datos. |
+| `MINIDOCS_LIVE_TEST=1 MINIDOCS_TEST_URL=http://127.0.0.1:3010 pnpm --env-file .env.local test:lifecycle` | Exit 1 en preflight con mensaje de migración pendiente. No llegó a crear el fixture ni a borrar/retirar permisos existentes. Es un bloqueo de configuración remota comprobado, no un éxito de borrado. |
+| Acciones HTTP compiladas nuevas | **8 rechazos correctos**: UUID inválido, cookie `admin`, payload con propietario arbitrario y UUID inexistente, para Delete y Unshare. Sin modificar documentos existentes; no prueba la operación positiva bloqueada. |
+| Navegador / despliegue público | No se han probado los nuevos controles mediante clics ni en una URL pública. |
+
+Evidencia: [lifecycle-checks.txt](verification/lifecycle-checks.txt), [lifecycle-sql.txt](verification/lifecycle-sql.txt), [deletion-preflight.json](verification/deletion-preflight.json), [preflight final](verification/deletion-preflight-latest.json), [lifecycle-remote-check.txt](verification/lifecycle-remote-check.txt), [lifecycle-http.json](verification/lifecycle-http.json).
+
+Las 17 pruebas unitarias nuevas comprueban propietario/cookie/UUID, denegación del receptor antes de escribir, borrado acotado a documento y propietario, eliminación de sus grants sin afectar a otros documentos, revocación idempotente y reversible volviendo a compartir, denegación de siguiente lectura/guardado desde una sesión que antes tenía acceso y errores de persistencia sin falso éxito. El adaptador SDK usa HTTP simulado; estas pruebas no prueban el Supabase remoto.
+
+Para activar en el proyecto existente, ejecutar `supabase/migrations/20261103000100_document_deletion.sql` en SQL Editor y repetir `pnpm --env-file .env.local test:lifecycle` con `MINIDOCS_LIVE_TEST=1` y `MINIDOCS_TEST_URL` del servidor de producción local en ejecución. No repetir la migración inicial. Después completar los casos Delete/Stop sharing en [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md).
+
+---
+
+Estado registrado en la **finalización anterior · 2026-11-03**: **TypeScript, lint, 105 pruebas unitarias y build Turbopack correctos**. Además pasó una prueba explícita con **Supabase real**, seguida de acciones HTTP reales sobre el build de producción local. Se verificaron creación, JSON/formato, reapertura, permisos, compartir sin duplicados, edición de Bob visible para Alice e importación TXT. **No son pruebas de interacción en navegador. No hay despliegue público verificado.** La auditoría de producción no informa vulnerabilidades conocidas; la completa informa un aviso moderado de desarrollo. Los bloqueos iniciales de red/configuración que siguen debajo son históricos.
 
 ## Resultados de la finalización · 2026-11-03
 

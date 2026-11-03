@@ -19,6 +19,7 @@ Replace pending fields only with real accessible URLs. Check repository and vide
 - Alice/Bob demo selection, server-derived ownership, owned/shared lists, persisted owner-only sharing and collaborator content editing.
 - Server authorization and validation; rejected private access, recipient rename/reshare and invalid actors; duplicate grants prevented.
 - UTF-8 `.txt` import with limits, empty/error handling, preserved logical line breaks and literal HTML-looking text.
+- Owner-only document deletion with confirmation and cascading permission cleanup; owner-only revocation with subsequent read/save denial. Requires the incremental DELETE-grant migration in the existing Supabase project.
 - Strict TypeScript, pnpm-only workflow, SQL migration/seed, Vitest coverage, private server credentials and Vercel configuration.
 - English functional UI, no promotional slogans and authored corner radii within 7px.
 

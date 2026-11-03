@@ -2,34 +2,35 @@
 
 import { useState, useTransition } from "react";
 
-import { shareDocumentAction } from "@/app/actions/documents";
+import { shareDocumentAction, unshareDocumentAction } from "@/app/actions/documents";
 import { DEMO_USERS, type DemoUser } from "@/lib/demo-users";
 
 type Props = { id: string; user: DemoUser; sharedWith: string[]; disabled: boolean };
 
 export function DocumentShareButton({ id, user, sharedWith, disabled }: Props) {
   const recipient = DEMO_USERS.find((candidate) => candidate.id !== user.id);
-  const [done, setDone] = useState(false);
+  const [shared, setShared] = useState(() => Boolean(recipient && sharedWith.includes(recipient.id)));
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   if (!recipient) return null;
-  const shared = done || sharedWith.includes(recipient.id);
 
   return (
     <div className="share-control">
-      <button type="button" className="button button--secondary" disabled={disabled || pending || shared}
-        title={disabled && !shared ? "Save your changes before sharing." : undefined}
+      {shared && <span className="share-status" role="status">Shared with {recipient.name}</span>}
+      <button type="button" className="button button--secondary" disabled={disabled || pending}
+        title={disabled ? "Save your changes before changing access." : undefined}
         onClick={() => {
+          if (shared && !window.confirm(`Stop sharing with ${recipient.name}? They will no longer be able to open or save this document.`)) return;
           setError(null);
           startTransition(async () => {
             try {
-              const result = await shareDocumentAction(id);
+              const result = await (shared ? unshareDocumentAction(id) : shareDocumentAction(id));
               if (!result.ok) { setError(result.error); return; }
-              setDone(true);
-            } catch { setError("Unable to share the document. Please try again."); }
+              setShared(!shared);
+            } catch { setError("Unable to update sharing. Please try again."); }
           });
         }}>
-        {pending ? "Sharing…" : shared ? `Shared with ${recipient.name}` : `Share with ${recipient.name}`}
+        {pending ? shared ? "Stopping…" : "Sharing…" : shared ? "Stop sharing" : `Share with ${recipient.name}`}
       </button>
       {error && <p className="inline-error" role="alert">{error}</p>}
     </div>

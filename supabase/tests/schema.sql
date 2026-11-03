@@ -72,6 +72,12 @@ begin
     end loop;
   end loop;
 
+  foreach table_name in array array['documents', 'document_shares'] loop
+    if not has_table_privilege('service_role', format('public.%I', table_name), 'DELETE') then
+      raise exception 'FAIL: apply the document deletion migration for %', table_name;
+    end if;
+  end loop;
+
   raise notice 'PASS: seed, constraints, sharing integrity, timestamp and browser grants';
 end;
 $$;

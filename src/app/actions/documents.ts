@@ -7,6 +7,26 @@ import { getActiveDemoUser } from "@/server/demo-session";
 import { getDocumentService } from "@/server/documents";
 import { AppError } from "@/lib/errors";
 
+export async function deleteDocumentAction(id: unknown) {
+  return runAction(async () => {
+    const actor = await getActiveDemoUser();
+    const result = await getDocumentService().remove(actor.handle, id);
+    revalidatePath("/");
+    revalidatePath(`/documents/${result.id}`);
+    return result;
+  });
+}
+
+export async function unshareDocumentAction(id: unknown) {
+  return runAction(async () => {
+    const actor = await getActiveDemoUser();
+    const result = await getDocumentService().unshare(actor.handle, id);
+    revalidatePath("/");
+    revalidatePath(`/documents/${result.id}`);
+    return result;
+  });
+}
+
 export async function importTxtAction(input: unknown) {
   return runAction(async () => {
     const actor = await getActiveDemoUser();

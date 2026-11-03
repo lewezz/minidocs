@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-11-03T00:15:33.331Z",
+  "existingDocumentsModified": false,
+  "ready": false,
+  "results": [
+    {
+      "table": "documents",
+      "status": 403,
+      "errorCode": "42501",
+      "deleteAllowed": false
+    },
+    {
+      "table": "document_shares",
+      "status": 403,
+      "errorCode": "42501",
+      "deleteAllowed": false
+    }
+  ]
+}

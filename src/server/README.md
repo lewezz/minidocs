@@ -12,4 +12,6 @@ The secret key bypasses RLS. Application authorization therefore runs for every 
 
 Sharing targets the other fixed demo identity, uses an idempotent repository upsert and is backed by a composite database primary key. Recipients can edit content but cannot rename or reshare. Import creates a new document owned by the server-resolved actor and builds text nodes without parsing HTML.
 
+Deletion and revocation require the owner. Removal is additionally filtered by document and owner IDs in SQL, and cascading foreign keys remove only that document's grants. Revocation removes only the other demo user's editor permission; the document stays intact. Every subsequent read/save rechecks access. Apply the incremental deletion migration for the server role's DELETE grants; it adds no browser privileges.
+
 The demo selector does not authenticate a person: any visitor can choose Alice or Bob. HttpOnly and SameSite do not make it production authentication.

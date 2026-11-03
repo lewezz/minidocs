@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-11-03T00:08:45.715Z",
+  "operation": "DELETE restricted to a newly generated nonexistent UUID; no existing data selected or removed",
+  "results": [
+    {
+      "table": "documents",
+      "status": 403,
+      "errorCode": "42501",
+      "deleteAllowed": false
+    },
+    {
+      "table": "document_shares",
+      "status": 403,
+      "errorCode": "42501",
+      "deleteAllowed": false
+    }
+  ]
+}

@@ -28,6 +28,35 @@ function adapter(responder: (url: URL, init: RequestInit | undefined) => Respons
 }
 
 describe("Supabase query adapter (mock HTTP, not a remote database)", () => {
+  it("deletes only the matching document and owner, returning whether a row was deleted", async () => {
+    const { repository, requests } = adapter(() => Response.json({ id: DOCUMENT_ID }));
+    expect(await repository.remove(DOCUMENT_ID, DEMO_USERS[0].id)).toBe(true);
+    expect(requests[0]?.init?.method).toBe("DELETE");
+    expect(requests[0]?.url.pathname).toMatch(/\/documents$/);
+    expect(requests[0]?.url.searchParams.get("id")).toBe(`eq.${DOCUMENT_ID}`);
+    expect(requests[0]?.url.searchParams.get("owner_id")).toBe(`eq.${DEMO_USERS[0].id}`);
+    expect(requests[0]?.url.searchParams.get("select")).toBe("id");
+    const missing = adapter(() => Response.json(null));
+    expect(await missing.repository.remove(DOCUMENT_ID, DEMO_USERS[0].id)).toBe(false);
+  });
+
+  it("revokes only the matching document, recipient and editor grant", async () => {
+    const { repository, requests } = adapter(() => new Response(null, { status: 204 }));
+    await repository.unshare(DOCUMENT_ID, DEMO_USERS[1].id);
+    expect(requests[0]?.init?.method).toBe("DELETE");
+    expect(requests[0]?.url.pathname).toMatch(/\/document_shares$/);
+    expect(requests[0]?.url.searchParams.get("document_id")).toBe(`eq.${DOCUMENT_ID}`);
+    expect(requests[0]?.url.searchParams.get("user_id")).toBe(`eq.${DEMO_USERS[1].id}`);
+    expect(requests[0]?.url.searchParams.get("permission")).toBe("eq.editor");
+  });
+
+  it("returns safe persistence errors for denied deletions and revocations", async () => {
+    const { repository } = adapter(() => Response.json({ code: "42501", message: "private database detail" }, { status: 403 }));
+    await expect(repository.remove(DOCUMENT_ID, DEMO_USERS[0].id)).rejects.toMatchObject({ code: "PERSISTENCE" });
+    await expect(repository.unshare(DOCUMENT_ID, DEMO_USERS[1].id)).rejects.toMatchObject({ code: "PERSISTENCE" });
+    await expect(repository.remove(DOCUMENT_ID, DEMO_USERS[0].id)).rejects.not.toThrow("private database detail");
+  });
+
   it("filters both lists by the actor and never fetches document content in a listing", async () => {
     const { repository, requests } = adapter((url) => Response.json(url.pathname.endsWith("/documents") ? [row] : []));
     const lists = await repository.listForUser(DEMO_USERS[0].id);

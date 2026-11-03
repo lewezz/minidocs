@@ -23,6 +23,13 @@ export function memoryRepository() {
     id: row.id, ownerId: row.ownerId, title: row.title, createdAt: row.createdAt, updatedAt: row.updatedAt,
   });
   const repository = {
+    remove: vi.fn(async (id: string, ownerId: string) => {
+      if (rows.get(id)?.ownerId !== ownerId) return false;
+      rows.delete(id);
+      for (const grant of grants) if (grant.startsWith(`${id}:`)) grants.delete(grant);
+      return true;
+    }),
+    unshare: vi.fn(async (id: string, userId: string) => { grants.delete(`${id}:${userId}`); }),
     share: vi.fn(async (id: string, userId: string) => { grants.add(`${id}:${userId}`); }),
     shareRecipients: vi.fn(async (id: string) => [...grants].filter((grant) => grant.startsWith(`${id}:`)).map((grant) => grant.slice(id.length + 1))),
     listForUser: vi.fn(async (userId: string) => ({

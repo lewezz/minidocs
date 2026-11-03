@@ -1,0 +1,56 @@
+{
+  "verifiedAt": "2026-11-03T00:14:51.620Z",
+  "browser": false,
+  "transport": "Real compiled server actions over HTTP",
+  "scope": "Rejection paths only; no existing document targeted or modified; positive DELETE remains blocked by missing SQL grants",
+  "checks": [
+    {
+      "action": "deleteDocumentAction",
+      "actor": "alice",
+      "expectedCode": "VALIDATION",
+      "passed": true
+    },
+    {
+      "action": "deleteDocumentAction",
+      "actor": "admin",
+      "expectedCode": "VALIDATION",
+      "passed": true
+    },
+    {
+      "action": "deleteDocumentAction",
+      "actor": "alice",
+      "expectedCode": "VALIDATION",
+      "passed": true
+    },
+    {
+      "action": "deleteDocumentAction",
+      "actor": "alice",
+      "expectedCode": "NOT_FOUND",
+      "passed": true
+    },
+    {
+      "action": "unshareDocumentAction",
+      "actor": "alice",
+      "expectedCode": "VALIDATION",
+      "passed": true
+    },
+    {
+      "action": "unshareDocumentAction",
+      "actor": "admin",
+      "expectedCode": "VALIDATION",
+      "passed": true
+    },
+    {
+      "action": "unshareDocumentAction",
+      "actor": "alice",
+      "expectedCode": "VALIDATION",
+      "passed": true
+    },
+    {
+      "action": "unshareDocumentAction",
+      "actor": "alice",
+      "expectedCode": "NOT_FOUND",
+      "passed": true
+    }
+  ]
+}

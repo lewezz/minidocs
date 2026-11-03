@@ -17,6 +17,8 @@ Status: this checklist is provided for the candidate. It has not been completed 
 
 ## Additional checks
 
+- Owner deletion: as Alice, create a disposable document and share it with Bob. Cancel Delete first and confirm nothing changes, then confirm deletion. It must disappear from both lists; opening its URL as either identity must return not found. The owner's editor also provides Delete. Recipients have no deletion control and server requests are denied.
+- Revocation: share a different disposable document and open it as Bob. As Alice, choose Stop sharing and confirm. Bob must lose it from Shared with me, direct reopening must return not found and saving from an already-open editor must fail. Alice's document remains intact. Share again and confirm Bob regains access. Apply the incremental SQL migration first.
 - Keyboard: visible focus, associated title label, named formatting controls, selected formatting state and accessible save/error feedback.
 - Narrow viewport: document actions and toolbar remain usable; the writing area scrolls without losing controls.
 - Unsaved changes: try leaving the editor and reloading. Confirm the warning, cancel it and verify edits remain.
